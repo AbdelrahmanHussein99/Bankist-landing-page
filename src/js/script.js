@@ -14,6 +14,7 @@ const nav = document.querySelector("nav");
 const tabsContainer = document.querySelector(".operations__tab-container");
 const tabs = document.querySelectorAll(".operations__tab");
 const tabsContent = document.querySelectorAll(".operations__content");
+const header = document.querySelector(".header");
 
 const openModal = function (e) {
   e.preventDefault();
@@ -55,11 +56,19 @@ const handleHover = function (e) {
     logo.style.opacity = this.opacity;
   }
 };
-const initialCoords = section1.getBoundingClientRect();
-window.addEventListener("scroll", function () {
-  if (initialCoords.top > this.window.scrollY) nav.classList.add("sticky");
+
+const navHeight = nav.getBoundingClientRect().height;
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) nav.classList.add("sticky");
   else nav.classList.remove("sticky");
+};
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
 });
+headerObserver.observe(header);
 // how to set property or preperties to  this keyword== obj
 nav.addEventListener("mouseover", handleHover.bind({ opacity: 0.5 }));
 nav.addEventListener("mouseout", handleHover.bind({ opacity: 1 }));
